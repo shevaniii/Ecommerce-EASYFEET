@@ -11,6 +11,7 @@ app.use(cors())
 app.use(express.json()) //to parse data into json 
 app.use('/api/products', productRoute)
 
+
 app.get("/", (req, res)=>{
     res.send("server is running");
 })

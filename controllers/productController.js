@@ -18,6 +18,7 @@ export const getProduct = async (req, res)=>{
 
 // product get by id
  export const getProductById = async  (req, res)=>{
+  console.log("🔍 getProductById CALLED with id:", req.params.id);
     try{
      const product = await Product.findById(req.params.id) 
      if (product){res.json(product)}
