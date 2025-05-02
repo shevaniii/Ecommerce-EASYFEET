@@ -4,7 +4,6 @@ import {Link} from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../features/Products/ProductsSlice";
 import ProductCard from "../components/ProductCard";
-import RotatingCards from "../components/RotatingCards";
  
 const HomePage = () => {
   const dispatch = useDispatch();

@@ -1,16 +1,18 @@
-import express from "express" 
 import dotenv from 'dotenv'
+dotenv.config()
+import express from "express" 
 import connectDB from './config/db.js'
 import cors from 'cors'
 import productRoute from './routes/productRoute.js'
-dotenv.config()
+import authRoute from './routes/authRoute.js'
+
 connectDB()
 
 const app = express()
 app.use(cors())
 app.use(express.json()) //to parse data into json 
 app.use('/api/products', productRoute)
-
+app.use('/api/auth', authRoute)   // all authentication routes should have prefix '/auth' .
 
 app.get("/", (req, res)=>{
     res.send("server is running");

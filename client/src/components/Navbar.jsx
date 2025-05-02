@@ -18,7 +18,7 @@ const Navbar = () => {
           <Link to="/" className="hover:text-red-500 transition">Home</Link>
           <Link to="/products" className="hover:text-red-500 transition">Products</Link>
           <Link to="/about" className="hover:text-red-500 transition">About</Link>
-          <Link to="/cart" className="hover:text-red-500 transition">Cart</Link>
+          <Link to="/cart" className="hover:text-red-500 transition">🛒Cart</Link>
         </div>
       </div>
     </motion.nav>
