@@ -1,32 +1,41 @@
-import Navbar from './components/Navbar'
-import HomePage from './pages/HomePage.jsx'
-import {Provider } from 'react-redux'
-import {store } from './app/store.js'
-import { Routes, Route , BrowserRouter } from 'react-router-dom'
-import Footer from './components/Footer.jsx'
-import ProductDetails from './pages/ProductDetails.jsx'
-import ProductList from './pages/ProductList.jsx'
-import CartPage from './pages/CartPage.jsx'
-import LoginPage from './pages/loginPage.jsx'
-import SignupPage from './pages/signupPage.jsx'
+import { useSelector , useDispatch } from 'react-redux';
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import HomePage from './pages/HomePage.jsx';
+import ProductDetails from './pages/ProductDetails.jsx';
+import ProductList from './pages/ProductList.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import SignupPage from './pages/SignupPage.jsx';
+import LandingPage from './pages/LandingPage.jsx';
+import { fetchProfile } from './features/users/UsersSlice.js';
 
 function App() {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.users.isAuthenticated);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      dispatch(fetchProfile());
+    }
+  }, [dispatch]);
+
   return (
-    <Provider store={store}>
-    <BrowserRouter >
-    <Navbar />
-    <Routes>
-      <Route path='/' element= {<HomePage/>} />
-      <Route path= '/products' element = {<ProductList /> } />
-      <Route path='/products/:id' element = {<ProductDetails />} />
-      <Route path='/cart' element = {<CartPage />} />
-      <Route path='/login' element = {<LoginPage />} />
-      <Route path= '/signup' element = {<SignupPage />} />
-    </Routes>
-    <Footer />
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={!isAuthenticated ? <LandingPage /> : <Navigate to="/home" />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/home" element={isAuthenticated ? <HomePage /> : <Navigate to="/" />} />
+        <Route path="/products" element={<ProductList />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
+      </Routes>
+      <Footer />
     </BrowserRouter>
-    </Provider>
-  )
+  );
 }
 
-export default App
+export default App;

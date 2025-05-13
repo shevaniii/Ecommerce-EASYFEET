@@ -11,3 +11,5 @@ router.post('/signup' , signup)
 // protected routes
 router.get('/profile', authenticateToken , profile)
  export default router
+
+ 

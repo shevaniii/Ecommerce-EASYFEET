@@ -10,6 +10,8 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="sticky top-0 z-50 bg-black text-white shadow-md bg-black/80 backdrop-blur-md border-b border-red-500">
+
+
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold text-red-500 tracking-wide hover:text-white transition">
           EasyFEET
