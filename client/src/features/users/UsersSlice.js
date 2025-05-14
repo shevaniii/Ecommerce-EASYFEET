@@ -5,7 +5,7 @@ export const loginUser = createAsyncThunk('/api/login' , async(userData , thunkA
    try{
     const res = await axios.post('api/auth/login', userData );
     localStorage.setItem('token', res.data.token);
-    return res.data;
+    return {token: res.data.token , user: res.data.user};
 
    }catch(error){
      return thunkAPI.rejectWithValue(error.response?.data?.message || 'login failed');    
@@ -69,7 +69,8 @@ const userSlice = createSlice(
          })
          .addCase(loginUser.fulfilled ,  (state , action)=>{
             state.status = 'succeeded',
-            state.user = action.payload.user,  
+            state.user = action.payload.user, 
+            state.token = action.payload.token, 
             state.isAuthenticated = true
          })
          .addCase(loginUser.rejected, (state , action)=>{
@@ -85,6 +86,7 @@ const userSlice = createSlice(
       .addCase(signupUser.fulfilled , (state, action)=>{
             state.status ='succeeded'
             state.user = action.payload.user;
+            state.token= action.payload.token;
             state.isAuthenticated = true;
          
       })
