@@ -42,6 +42,8 @@ export const getCart = async (req, res) => {
   }
 };
 
+
+
 //Remove from Cart
 export const removeFromCart = async (req, res) => {
   try {

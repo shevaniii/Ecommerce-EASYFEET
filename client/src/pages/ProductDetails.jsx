@@ -1,14 +1,27 @@
 
-import { useSelector } from "react-redux";
-import { Link , useParams} from "react-router-dom";
+import { useSelector , useDispatch } from "react-redux";
+import { Link , useParams , useNavigate} from "react-router-dom";
+import { addToCart} from "../features/Products/CartSlice";
+
 
 const ProductDetails = () => {
+  const dispatch = useDispatch();
+   const navigate = useNavigate();
     const {id} = useParams();
     const {products , state} = useSelector((state)=>state.products)
     const product = products.find((p)=> p._id == id)
 
     if(!product){return (<div>loading...</div> )}
-
+   
+  const handleAddToCart = () => {
+    try{
+      dispatch(addToCart({ productId: product._id, quantity: 1 })).unwrap();
+        navigate('/cart')
+    }catch(error){
+      console.log("failed to add product in the cart" , error)
+    }
+   
+  };
 
   return (
     <div className="min-h-screen bg-black text-white py-12 px-6">
@@ -43,6 +56,7 @@ const ProductDetails = () => {
 
             {/* Add to Cart Button */}
             <button
+            onClick={handleAddToCart}
               disabled={product.countInStock === 0}
               className={`mt-4 px-6 py-2 rounded-full font-semibold transition-all ${
                 product.countInStock > 0

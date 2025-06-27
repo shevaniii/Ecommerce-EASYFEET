@@ -9,7 +9,7 @@ import ProductList from './pages/ProductList.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
 import LandingPage from './pages/LandingPage.jsx';
-// import CartPage from './pages/CartPage.jsx'
+import CartPage from './pages/CartPage.jsx';
 import { fetchProfile } from './features/users/UsersSlice.js';
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
         <Route path="/home" element={isAuthenticated ? <HomePage /> : <Navigate to="/" />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/products/:id" element={<ProductDetails />} />
-         {/* <Route path="/cart" element={<CartPage />} /> */}
+         <Route path="/cart" element={<CartPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
