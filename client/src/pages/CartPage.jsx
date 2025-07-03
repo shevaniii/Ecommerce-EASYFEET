@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCart, removeFromCart } from '../features/Products/CartSlice';
+import { placeOrder } from '../features/Products/OrderSlice';
+import { useNavigate } from 'react-router-dom';
 
 const CartPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { items, loading, error } = useSelector((state) => state.cart);
 
@@ -28,7 +31,9 @@ const CartPage = () => {
       </div>
     );
   }
-
+    const handleCheckout=()=>{
+        navigate('/order');
+    }
   return (
     <div className="p-8 flex flex-col md:flex-row gap-8">
       <div className="w-full md:w-2/3 space-y-4">
@@ -59,7 +64,9 @@ const CartPage = () => {
         <h2 className="text-xl font-bold mb-4">Order Summary</h2>
         <p className="mb-2">Items: {totalItems}</p>
         <p className="mb-4 font-semibold">Total: ₹{totalPrice}</p>
-        <button className="w-full bg-black text-white py-2 rounded hover:bg-gray-900">
+        <button 
+        onClick={handleCheckout}
+        className="w-full bg-black text-white py-2 rounded hover:bg-gray-900">
           Proceed to Checkout
         </button>
       </div>
