@@ -3,7 +3,7 @@ import { FaInstagram, FaTwitter, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-white mt-10 pt-10 pb-6 px-6 md:px-20">
+    <footer className="bg-[#0e0e0e] text-white pt-10 pb-6 mt-5 px-6 md:px-20">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 border-b border-red-500 pb-8">
         <div>
           <h2 className="text-lg font-bold text-red-500 mb-4">Shop</h2>
@@ -40,11 +40,11 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <p className="text-center text-xs mt-8 text-gray-400">
-        &copy; {new Date().getFullYear()} EasyFEET Co. All rights reserved.(Shivani giri)
+      <p className="text-center text-xs mt-6 text-gray-500">
+        &copy; {new Date().getFullYear()} EasyFEET Co. All rights reserved. (Shivani Giri)
       </p>
     </footer>
-  );
+  )
 };
 
 export default Footer;

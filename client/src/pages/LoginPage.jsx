@@ -6,8 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  // ✅ Correct: Match the names defined in your userSlice
+
   const { status, error, isAuthenticated } = useSelector((state) => state.users);
 
   const [form, setForm] = useState({ email: '', password: '' });
@@ -21,7 +20,6 @@ const LoginPage = () => {
     dispatch(loginUser(form));
   };
 
-  // ✅ Automatically redirect if login is successful
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
@@ -29,36 +27,38 @@ const LoginPage = () => {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="max-w-md mx-auto mt-20 p-6 shadow-lg rounded bg-white">
-      <h2 className="text-2xl font-bold mb-4">Login</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          placeholder="Password"
-          required
-          className="w-full p-2 border rounded"
-        />
-        <button
-          type="submit"
-          disabled={status === 'loading'}
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-        >
-          {status === 'loading' ? 'Logging in...' : 'Login'}
-        </button>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#0f0f0f] via-black to-[#0f0f0f] text-white">
+      <div className="bg-[#1a1a1a] shadow-2xl rounded-2xl px-10 py-12 w-full max-w-md border border-red-600">
+        <h2 className="text-3xl font-bold text-red-500 text-center mb-6">Login to EasyFEET</h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            value={form.email}
+            onChange={handleChange}
+            required
+            className="w-full bg-white text-black border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter your password"
+            value={form.password}
+            onChange={handleChange}
+            required
+           className="w-full bg-white text-black border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+          <button
+            type="submit"
+            disabled={status === 'loading'}
+            className="w-full py-2 font-semibold bg-red-500 text-black rounded hover:bg-red-600 transition"
+          >
+            {status === 'loading' ? 'Logging in...' : 'Login'}
+          </button>
+          {error && <p className="text-red-400 text-sm text-center">{error}</p>}
+        </form>
+      </div>
     </div>
   );
 };

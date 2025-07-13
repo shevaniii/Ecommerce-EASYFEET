@@ -1,12 +1,11 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCart, removeFromCart } from '../features/Products/CartSlice';
-import { placeOrder } from '../features/Products/OrderSlice';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart, removeFromCart } from "../features/Products/CartSlice";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { items, loading, error } = useSelector((state) => state.cart);
 
   useEffect(() => {
@@ -17,58 +16,93 @@ const CartPage = () => {
     dispatch(removeFromCart(productId));
   };
 
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+  const handleCheckout = () => {
+    navigate("/order");
+  };
 
-  if (loading) return <p className="text-center mt-10">Loading...</p>;
-  if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = items.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
+
+  if (loading)
+    return <p className="text-center text-white mt-10">Loading...</p>;
+  if (error)
+    return <p className="text-center mt-10 text-red-500">{error}</p>;
 
   if (!items.length) {
     return (
-      <div className="text-center py-20">
-        <h2 className="text-2xl font-bold">Your Cart is Empty</h2>
-        <a href="/products" className="text-blue-500 underline">Go back to shop</a>
+      <div className="min-h-screen flex flex-col justify-center items-center bg-black text-white">
+        <h2 className="text-3xl font-bold mb-4">🛒 Your Cart is Empty</h2>
+        <a
+          href="/products"
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+        >
+          Go back to Shop
+        </a>
       </div>
     );
   }
-    const handleCheckout=()=>{
-        navigate('/order');
-    }
-  return (
-    <div className="p-8 flex flex-col md:flex-row gap-8">
-      <div className="w-full md:w-2/3 space-y-4">
-        <h1 className="text-3xl font-bold mb-4">Shopping Cart</h1>
-        {items.map((item) => (
-          <div
-            key={item._id}
-            className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md"
-          >
-            <div className="flex gap-4 items-center">
-              <img src={item.product.image} alt={item.product.name} className="w-24 h-24 object-cover rounded" />
-              <div>
-                <h2 className="text-xl font-semibold">{item.product.name}</h2>
-                <p>₹{item.product.price} x {item.quantity}</p>
-              </div>
-            </div>
-            <button
-              onClick={() => handleRemove(item.product._id)}
-              className="text-red-600 hover:text-red-800"
-            >
-              Remove
-            </button>
-          </div>
-        ))}
-      </div>
 
-      <div className="w-full md:w-1/3 p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-        <p className="mb-2">Items: {totalItems}</p>
-        <p className="mb-4 font-semibold">Total: ₹{totalPrice}</p>
-        <button 
-        onClick={handleCheckout}
-        className="w-full bg-black text-white py-2 rounded hover:bg-gray-900">
-          Proceed to Checkout
-        </button>
+  return (
+    <div className="min-h-screen bg-black text-white px-6 py-10">
+      <h1 className="text-4xl font-bold text-center text-red-500 mb-10 tracking-wider">
+        Your Shopping Cart 🛍️
+      </h1>
+      <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
+        {/* Cart Items */}
+        <div className="lg:w-2/3 space-y-6">
+          {items.map((item) => (
+            <div
+              key={item._id}
+              className="flex flex-col md:flex-row items-center justify-between gap-4 bg-red-900 rounded-xl p-4 border border-red-500 shadow-lg"
+            >
+              <img
+                src={item.product.image}
+                alt={item.product.name}
+                className="w-32 h-32 object-cover rounded-lg border-2 border-red-700"
+              />
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-xl font-bold text-red-300">
+                  {item.product.name}
+                </h3>
+                <p className="text-white font-medium">
+                  ₹{item.product.price} × {item.quantity}
+                </p>
+              </div>
+              <button
+                onClick={() => handleRemove(item.product._id)}
+                className="text-sm text-white px-4 py-2 bg-black border border-red-500 rounded hover:bg-red-600 transition"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* Summary Box */}
+        <div className="lg:w-1/3 bg-red-800 p-6 rounded-xl border border-red-500 shadow-xl">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">
+            Order Summary
+          </h2>
+          <div className="space-y-3 text-white">
+            <p className="flex justify-between">
+              <span>Total Items:</span>
+              <span className="font-semibold">{totalItems}</span>
+            </p>
+            <p className="flex justify-between">
+              <span>Total Price:</span>
+              <span className="font-bold text-red-300">₹{totalPrice}</span>
+            </p>
+          </div>
+          <button
+            onClick={handleCheckout}
+            className="w-full mt-6 bg-black text-white py-3 rounded-lg border border-red-500 hover:bg-red-700 hover:text-white transition font-semibold"
+          >
+            Proceed to Checkout →
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ import CartPage from './pages/CartPage.jsx';
 import { fetchProfile } from './features/users/UsersSlice.js';
 import OrderPage from './pages/OrderPage.jsx';
 import MyOrders from './pages/MyOrdersPage.jsx'
+import AboutPage from './pages/AboutPage.jsx';
 
 function App() {
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ function App() {
          <Route path="/cart" element={<CartPage />} />
          <Route path="/order" element={<OrderPage />} />
         <Route path="/myorders" element={<MyOrders />} />
-
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
