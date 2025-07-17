@@ -10,22 +10,15 @@ import orderRoute from './routes/orderRoute.js'
 connectDB()
 
 const app = express()
-
-app.options('*', cors({
-  origin: [
-    "http://localhost:5173",
-    "https://ecommerce-easyfeet.vercel.app",
-  ],
-  credentials: true,
-}));
-// ✅ Handle actual requests
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://ecommerce-easyfeet.vercel.app",
-  ],
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173", // ✅ allow local development
+      "https://ecommerce-easyfeet.vercel.app", // ✅ allow deployed frontend
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json()) //to parse data into json 
 app.use('/api/products', productRoute)
 app.use('/api/auth', authRoute)   // all authentication routes should have prefix '/auth' .
