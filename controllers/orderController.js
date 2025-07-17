@@ -2,13 +2,15 @@ import Order from "../models/order.model.js";
 import Cart from "../models/cart.model.js";
 import Product from "../models/product.model.js"; 
 
+
 export const createOrder = async (req, res) => {
   try {
-    const userId = req.user._id;
-    const { buyNow, productId, quantity } = req.body;
+    const userId = req.user._id || req.user.id; // ✅ Use correct ID
+    // console.log("in order controller userId is ", userId);
 
+    const { buyNow, productId, quantity } = req.body;
     let items = [];
-    let totalprice = 0;
+    let totalPrice = 0;
 
     if (buyNow && productId) {
       const product = await Product.findById(productId);
@@ -19,7 +21,7 @@ export const createOrder = async (req, res) => {
       }
 
       items.push({ product: productId, quantity });
-      totalprice = product.price * quantity;
+      totalPrice = product.price * quantity;
     } else {
       const cart = await Cart.findOne({ user: userId }).populate("items.product");
       if (!cart || cart.items.length === 0) {
@@ -31,7 +33,7 @@ export const createOrder = async (req, res) => {
         quantity: item.quantity,
       }));
 
-      totalprice = cart.items.reduce(
+      totalPrice = cart.items.reduce(
         (sum, item) => sum + item.product.price * item.quantity,
         0
       );
@@ -39,7 +41,9 @@ export const createOrder = async (req, res) => {
       await Cart.findOneAndDelete({ user: userId });
     }
 
-    const order = new Order({ user: userId, items, totalprice });
+    // ✅ Use correct key name
+    const order = new Order({ user: userId, items, totalPrice });
+    // console.log("in ordercontroller totalPrice is", totalPrice);
     await order.save();
 
     res.status(201).json({ msg: "Order placed successfully", order });
@@ -49,8 +53,8 @@ export const createOrder = async (req, res) => {
   }
 };
 
-export const getOrders =async (req, res)=>{
-    const userId = req.user._id;
-    const orders = await Order.find({user:  userId}).populate('items.product');
-    res.json(orders); 
+export const getOrders = async (req, res) => {
+  const userId = req.user._id || req.user.id; // ✅ Use correct ID
+  const orders = await Order.find({ user: userId }).populate('items.product');
+  res.json(orders);
 };

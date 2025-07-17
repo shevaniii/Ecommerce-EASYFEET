@@ -16,8 +16,6 @@ app.use('/api/products', productRoute)
 app.use('/api/auth', authRoute)   // all authentication routes should have prefix '/auth' .
 app.use('/api/auth/cart', cartRoute)
 app.use('/api/auth/order' , orderRoute);
-
-
 const PORT = process.env.PORT || 3001
 app.listen(PORT , ()=>{
     console.log(`server is started at the port ${PORT} `);

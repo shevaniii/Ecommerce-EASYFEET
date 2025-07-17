@@ -68,7 +68,7 @@ const MyOrders = () => {
               {/* Order Summary */}
               <div className="mt-4 space-y-2">
                 <p className="text-white font-semibold">
-                  Total: ₹{order.totalprice}
+                  Total: ₹{order.totalPrice}
                 </p>
                 <p className="text-sm text-gray-300">
                   Items:{" "}

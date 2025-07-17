@@ -4,7 +4,7 @@ const orderSchema = mongoose.Schema({
     user:{
         type: mongoose.Schema.Types.ObjectId,
         ref:'User',
-        rquired: true
+        required: true
     },
     items:[
         {
@@ -22,7 +22,7 @@ const orderSchema = mongoose.Schema({
 ],
 totalPrice: {
     type:Number, 
-    rquired:true
+    required:true
 },
 status:{
     type:String , 
