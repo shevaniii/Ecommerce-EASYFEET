@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { AlignVerticalJustifyCenter } from "lucide-react";
 
 export default function LandingPage() {
   const navigate = useNavigate();
