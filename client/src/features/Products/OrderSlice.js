@@ -1,12 +1,13 @@
 import { createAsyncThunk , createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import BASE_URL from "../../utils/apiconfig";
 
 
 export const placeOrder = createAsyncThunk('order/placeOrder' , 
     async ({buyNow = false  ,productId= null , quantity=1 , address , phone }={}, {rejectWithValue})=>{
         try{
             const token = localStorage.getItem('token');
-             const res = await axios.post('api/auth/order/create' , buyNow?{buyNow , productId , quantity , address , phone}:{address , phone} , 
+             const res = await axios.post(`${BASE_URL}/api/auth/order/create` , buyNow?{buyNow , productId , quantity , address , phone}:{address , phone} , 
                 {headers: {Authorization :`Bearer ${token}`}}
               );
             return res.data.orders;
@@ -17,7 +18,7 @@ export const placeOrder = createAsyncThunk('order/placeOrder' ,
 );
 export const fetchOrders = createAsyncThunk('orders/fetchOrders', async(_ , {rejectWithValue})=>{
 try{const token = localStorage.getItem('token');
-     const res = await axios.get('api/auth/order', {
+     const res = await axios.get(`${BASE_URL}/api/auth/order`, {
         headers: {Authorization: `Bearer ${token}`}
      });
      return res.data;

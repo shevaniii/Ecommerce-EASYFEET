@@ -53,6 +53,7 @@ export const createOrder = async (req, res) => {
   }
 };
 
+
 export const getOrders = async (req, res) => {
   const userId = req.user._id || req.user.id; // ✅ Use correct ID
   const orders = await Order.find({ user: userId }).populate('items.product');

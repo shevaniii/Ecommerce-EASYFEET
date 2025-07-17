@@ -1,6 +1,7 @@
 // src/features/Products/CartSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import BASE_URL from '../../utils/apiconfig';
 
 // ✅ Helper to get token safely
 const getToken = () => localStorage.getItem('token');
@@ -9,7 +10,7 @@ const getToken = () => localStorage.getItem('token');
 export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { rejectWithValue }) => {
   try {
     const token = getToken();
-    const res = await axios.get('/api/auth/cart', {
+    const res = await axios.get(`${BASE_URL}/api/auth/cart`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -25,7 +26,7 @@ export const addToCart = createAsyncThunk('cart/addToCart', async ({ productId, 
   try {
     const token = getToken();
     const res = await axios.post(
-      '/api/auth/cart/add',
+      `${BASE_URL}/api/auth/cart/add`,
       { productId, quantity },
       {
         headers: {
@@ -44,7 +45,7 @@ export const addToCart = createAsyncThunk('cart/addToCart', async ({ productId, 
 export const removeFromCart = createAsyncThunk('cart/removeFromCart', async (productId, { dispatch, rejectWithValue }) => {
   try {
     const token = getToken();
-    await axios.delete(`/api/auth/cart/remove/${productId}`, {
+    await axios.delete(`${BASE_URL}/api/auth/cart/remove/${productId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
