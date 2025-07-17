@@ -289,5 +289,4 @@ Contributions are welcome! Please follow these steps:
 
 ### 🌟 If you found this project helpful, please give it a star! ⭐
 
-![Footer](<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/655c9e99-e29d-480e-90ad-c29cefdfbf79" />
-)
+![Footer](<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/72d9cbea-b992-4eae-a069-81547e5eda80" />)
