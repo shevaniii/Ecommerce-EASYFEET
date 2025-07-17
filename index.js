@@ -21,7 +21,6 @@ app.use(
     optionSuccessStatus:200
   })
 );
-app.use(cors(corsOrigin));
 app.use(express.json()) //to parse data into json 
 app.use('/api/products', productRoute)
 app.use('/api/auth', authRoute)   // all authentication routes should have prefix '/auth' .
