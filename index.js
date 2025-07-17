@@ -7,8 +7,8 @@ import productRoute from './routes/productRoute.js'
 import authRoute from './routes/authRoute.js'
 import cartRoute from './routes/cartRoute.js'
 import orderRoute from './routes/orderRoute.js'
-connectDB()
 
+connectDB()
 const app = express()
 app.use(
   cors({
@@ -19,6 +19,16 @@ app.use(
     credentials: true,
   })
 );
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Max-Age", "1800");
+  res.setHeader("Access-Control-Allow-Headers", "content-type");
+  res.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS");
+  next();
+});
+
 app.use(express.json()) //to parse data into json 
 app.use('/api/products', productRoute)
 app.use('/api/auth', authRoute)   // all authentication routes should have prefix '/auth' .
