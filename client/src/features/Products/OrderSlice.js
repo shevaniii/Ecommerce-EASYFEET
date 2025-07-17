@@ -1,6 +1,6 @@
 import { createAsyncThunk , createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import BASE_URL from "../../utils/apiconfig";
+import BASE_URL from "../../utils/apiConfig.js";
 
 
 export const placeOrder = createAsyncThunk('order/placeOrder' , 

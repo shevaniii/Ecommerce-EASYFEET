@@ -1,6 +1,6 @@
 import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import BASE_URL from "../../utils/apiconfig";
+import BASE_URL from "../../utils/apiConfig.js";
 
 export const loginUser = createAsyncThunk('/api/login' , async(userData , thunkAPI)=>{
    try{
