@@ -13,14 +13,20 @@ const app = express()
 app.use(
   cors({
     origin: [
-      "http://localhost:5173", // ✅ allow local development
-      "https://ecommerce-easyfeet.vercel.app", // ✅ allow deployed frontend
+      "http://localhost:5173",
+      "https://ecommerce-easyfeet.vercel.app", 
     ],
      methods: 'GET,HEAD,PUT,POST,DELETE',
     credentials: true,
     optionSuccessStatus:200
   })
 );
+app.use((req, res, next) => {
+          res.setHeader('Access-Control-Allow-Origin', 'https://ecommerce-easyfeet-shevaniiis-projects.vercel.app');
+          res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+          res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+          next();
+        });
 app.use(express.json()) //to parse data into json 
 app.use('/api/products', productRoute)
 app.use('/api/auth', authRoute)   // all authentication routes should have prefix '/auth' .
