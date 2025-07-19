@@ -16,6 +16,7 @@ export const loginUser = createAsyncThunk('/api/login' , async(userData , thunkA
 export const signupUser = createAsyncThunk('/api/signup', async (userData , thunkAPI)=>{
    try{
       const res = await axios.post(`${BASE_URL}/api/auth/signup`, userData );
+      localStorage.setItem('token', res.data.token);
       return  res.data;
 
    }catch(err){
