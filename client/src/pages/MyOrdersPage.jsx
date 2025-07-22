@@ -1,14 +1,31 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOrders } from "../features/Products/OrderSlice";
+import { fetchOrders, clearOrderError } from "../features/Products/OrderSlice";
 
 const MyOrders = () => {
   const dispatch = useDispatch();
-  const { orders } = useSelector((state) => state.orders);
+  const { orders, loading, error } = useSelector((state) => state.orders);
 
   useEffect(() => {
     dispatch(fetchOrders());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        dispatch(clearOrderError());
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, dispatch]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black text-white px-6 py-10 flex justify-center items-center">
+        <p className="text-xl">Loading your orders...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black text-white px-6 py-10">
@@ -16,10 +33,25 @@ const MyOrders = () => {
         🧾 Your Orders
       </h1>
 
-      {orders.length === 0 ? (
-        <p className="text-center text-gray-300">No orders placed yet.</p>
+      {/* Error Display */}
+      {error && (
+        <div className="max-w-6xl mx-auto mb-4 p-4 bg-red-900/50 border border-red-500 rounded-lg text-red-300">
+          {error}
+        </div>
+      )}
+
+      {!orders || orders.length === 0 ? (
+        <div className="text-center">
+          <p className="text-gray-300 text-xl mb-6">No orders placed yet.</p>
+          <a
+            href="/products"
+            className="bg-red-600 text-white px-6 py-3 rounded hover:bg-red-700 transition"
+          >
+            Start Shopping
+          </a>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {orders.map((order) => (
             <div
               key={order._id}
@@ -32,16 +64,22 @@ const MyOrders = () => {
                     Order #{order._id.slice(-6)}
                   </p>
                   <p className="text-xs text-gray-400">
-                    {new Date(order.createdAt).toLocaleDateString()}
+                    {new Date(order.createdAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })}
                   </p>
                 </div>
                 <span
-                  className={`text-xs px-2 py-1 rounded-full ${
+                  className={`text-xs px-3 py-1 rounded-full font-semibold ${
                     order.status === "Delivered"
-                      ? "bg-green-600"
+                      ? "bg-green-600 text-white"
                       : order.status === "Shipped"
-                      ? "bg-yellow-600"
-                      : "bg-blue-600"
+                      ? "bg-yellow-600 text-black"
+                      : order.status === "Cancelled"
+                      ? "bg-gray-600 text-white"
+                      : "bg-blue-600 text-white"
                   }`}
                 >
                   {order.status || "Pending"}
@@ -49,40 +87,69 @@ const MyOrders = () => {
               </div>
 
               {/* Product Thumbnails */}
-              <div className="flex gap-2 overflow-x-auto mb-3">
-                {order.items.slice(0, 3).map((item) => (
-                  <img
-                    key={item.product._id}
-                    src={item.product.image}
-                    alt={item.product.name}
-                    className="w-20 h-20 object-cover rounded border border-red-500"
-                  />
+              <div className="flex gap-2 overflow-x-auto mb-4">
+                {order.items.slice(0, 3).map((item, index) => (
+                  <div key={index} className="flex-shrink-0">
+                    <img
+                      src={item.product?.image || '/placeholder-image.jpg'}
+                      alt={item.product?.name || 'Product'}
+                      className="w-16 h-16 object-cover rounded border border-red-500"
+                    />
+                    <p className="text-xs text-center text-gray-300 mt-1">
+                      ×{item.quantity}
+                    </p>
+                  </div>
                 ))}
                 {order.items.length > 3 && (
-                  <span className="text-xs text-gray-300 self-center ml-2">
-                    +{order.items.length - 3} more
-                  </span>
+                  <div className="flex items-center justify-center w-16 h-16 bg-gray-700 rounded border border-red-500 text-xs text-gray-300">
+                    +{order.items.length - 3}
+                  </div>
                 )}
               </div>
 
               {/* Order Summary */}
-              <div className="mt-4 space-y-2">
-                <p className="text-white font-semibold">
+              <div className="space-y-2">
+                <p className="text-white font-semibold text-lg">
                   Total: ₹{order.totalPrice}
                 </p>
                 <p className="text-sm text-gray-300">
-                  Items:{" "}
-                  {order.items
-                    .map((item) => `${item.product.name} × ${item.quantity}`)
-                    .join(", ")}
+                  Items: {order.items.reduce((sum, item) => sum + item.quantity, 0)}
                 </p>
+                {order.shippingAddress && (
+                  <p className="text-xs text-gray-400 truncate">
+                    📍 {order.shippingAddress}
+                  </p>
+                )}
+                {order.phoneNumber && (
+                  <p className="text-xs text-gray-400">
+                    📞 {order.phoneNumber}
+                  </p>
+                )}
               </div>
 
-              {/* Actions (optional) */}
-              {/* <div className="mt-4 flex justify-between text-sm text-red-300">
-                <button className="hover:underline">Track Order</button>
-                <button className="hover:underline">View Invoice</button>
-              </div> */}
+              {/* Product Details */}
+              <div className="mt-4 pt-4 border-t border-red-700">
+                <p className="text-xs text-gray-300 mb-2">Products:</p>
+                <div className="space-y-1">
+                  {order.items.map((item, index) => (
+                    <p key={index} className="text-xs text-gray-400">
+                      • {item.product?.name || 'Unknown Product'} × {item.quantity}
+                    </p>
+                  ))}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="mt-4 flex gap-2">
+                {order.status === 'Pending' && (
+                  <button className="text-xs bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-white transition">
+                    Track Order
+                  </button>
+                )}
+                <button className="text-xs bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded text-white transition">
+                  View Details
+                </button>
+              </div>
             </div>
           ))}
         </div>

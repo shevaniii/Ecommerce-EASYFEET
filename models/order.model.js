@@ -15,7 +15,7 @@ const orderSchema = mongoose.Schema({
        },
        quantity:{
         type:Number,
-        default: '0',
+        default: 1,
         required: true
        }
     }
@@ -24,9 +24,17 @@ totalPrice: {
     type:Number, 
     required:true
 },
+shippingAddress: {
+    type: String,
+    required: true
+},
+phoneNumber: {
+    type: String,
+    required: true
+},
 status:{
     type:String , 
-    enum:['Pending', 'Shipped' , 'Delivered'],
+    enum:['Pending', 'Shipped' , 'Delivered', 'Cancelled'],
     default: 'Pending'
 }},
 {timestamps:true})
