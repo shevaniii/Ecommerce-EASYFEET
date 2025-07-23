@@ -1,5 +1,5 @@
 import express from 'express'
-import {addToCart , removeFromCart , getCart} from '../controllers/cartController.js'
+import {addToCart , removeFromCart , getCart, updateCartQuantity, clearCart} from '../controllers/cartController.js'
 import { authenticateToken } from "../middlewares/authMiddleware.js"
 
 
