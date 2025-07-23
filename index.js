@@ -42,15 +42,32 @@ app.use(cors({
 // Handle preflight requests
 app.options('*', cors());
 
-app.use(express.json()) //to parse data into json 
+// Parse JSON
+app.use(express.json());
 
-// Mount routes in specific order to avoid conflicts
-app.use('/api/products', productRoute)
-app.use('/api/auth', authRoute)   // authentication routes
-app.use('/api/cart', cartRoute)   // cart routes (removed /auth prefix to avoid conflicts)
-app.use('/api/orders', orderRoute); // order routes (removed /auth prefix and changed to plural)
+// Basic health check route
+app.get('/', (req, res) => {
+  res.json({ message: 'EasyFeet API is running!' });
+});
 
-const PORT = process.env.PORT || 3001
-app.listen(PORT , ()=>{
-    console.log(`server is started at the port ${PORT} `);
-})
+// Mount routes in specific order - most specific first
+app.use('/api/products', productRoute);
+app.use('/api/auth', authRoute);
+app.use('/api/cart', cartRoute);
+app.use('/api/orders', orderRoute);
+
+// 404 handler
+app.use('*', (req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+});
+
+// Error handler
+app.use((error, req, res, next) => {
+  console.error('Server Error:', error);
+  res.status(500).json({ message: 'Internal server error' });
+});
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`🚀 Server is running on port ${PORT}`);
+});
