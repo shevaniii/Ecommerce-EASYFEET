@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCart, removeFromCart } from "../features/Products/CartSlice";
+import { fetchCart, removeFromCart, updateCartQuantity, clearCartError } from "../features/Products/CartSlice.js";
 import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
@@ -11,10 +11,24 @@ const CartPage = () => {
   useEffect(() => {
     dispatch(fetchCart());
   }, [dispatch]);
+  useEffect(() => {
+     if (error) {
+       const timer = setTimeout(() => {
+         dispatch(clearCartError());
+       }, 5000);
+       return () => clearTimeout(timer);
+     }
+   }, [error, dispatch]);
 
   const handleRemove = (productId) => {
     dispatch(removeFromCart(productId));
   };
+
+ const handleQuantityChange = (productId, newQuantity) => {
+     if (newQuantity < 1) return;
+     dispatch(updateCartQuantity({ productId, quantity: newQuantity }));
+   };
+ 
 
   const handleCheckout = () => {
     navigate("/order");
@@ -28,8 +42,6 @@ const CartPage = () => {
 
   if (loading)
     return <p className="text-center text-white mt-10">Loading...</p>;
-  if (error)
-    return <p className="text-center mt-10 text-red-500">{error}</p>;
 
   if (!items.length) {
     return (
@@ -50,6 +62,13 @@ const CartPage = () => {
       <h1 className="text-4xl font-bold text-center text-red-500 mb-10 tracking-wider">
         Your Shopping Cart 🛍️
       </h1>
+        {/* Error Display */}
+       {error && (
+         <div className="max-w-7xl mx-auto mb-4 p-4 bg-red-900/50 border border-red-500 rounded-lg text-red-300">
+           {error}
+         </div>
+       )}
+ 
       <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
         {/* Cart Items */}
         <div className="lg:w-2/3 space-y-6">
@@ -68,15 +87,44 @@ const CartPage = () => {
                   {item.product.name}
                 </h3>
                 <p className="text-white font-medium">
-                  ₹{item.product.price} × {item.quantity}
+                   ₹{item.product.price} each
+                 </p>
+                 <p className="text-red-300 text-sm">
+                   Stock: {item.product.countInStock}
                 </p>
               </div>
-              <button
-                onClick={() => handleRemove(item.product._id)}
-                className="text-sm text-white px-4 py-2 bg-black border border-red-500 rounded hover:bg-red-600 transition"
-              >
-                Remove
-              </button>
+                {/* Quantity Controls */}
+               <div className="flex items-center gap-2">
+                 <button
+                   onClick={() => handleQuantityChange(item.product._id, item.quantity - 1)}
+                   className="px-3 py-1 bg-red-700 hover:bg-red-600 rounded text-white"
+                   disabled={item.quantity <= 1}
+                 >
+                   -
+                 </button>
+                 <span className="px-4 py-1 bg-black border border-red-500 rounded text-white min-w-[3rem] text-center">
+                   {item.quantity}
+                 </span>
+                 <button
+                   onClick={() => handleQuantityChange(item.product._id, item.quantity + 1)}
+                   className="px-3 py-1 bg-red-700 hover:bg-red-600 rounded text-white"
+                   disabled={item.quantity >= item.product.countInStock}
+                 >
+                   +
+                 </button>
+               </div>
+ 
+               <div className="text-center">
+                 <p className="text-white font-semibold">
+                   ₹{item.product.price * item.quantity}
+                 </p>
+                 <button
+                   onClick={() => handleRemove(item.product._id)}
+                   className="text-sm text-white px-4 py-2 bg-black border border-red-500 rounded hover:bg-red-600 transition mt-2"
+                 >
+                   Remove
+                 </button>
+               </div>
             </div>
           ))}
         </div>
@@ -98,9 +146,10 @@ const CartPage = () => {
           </div>
           <button
             onClick={handleCheckout}
+               disabled={loading}
             className="w-full mt-6 bg-black text-white py-3 rounded-lg border border-red-500 hover:bg-red-700 hover:text-white transition font-semibold"
           >
-            Proceed to Checkout →
+            {loading ? "Processing..." : "Proceed to Checkout →"}
           </button>
         </div>
       </div>

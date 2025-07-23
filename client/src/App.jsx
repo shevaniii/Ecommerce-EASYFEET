@@ -14,6 +14,11 @@ import { fetchProfile } from './features/users/UsersSlice.js';
 import OrderPage from './pages/OrderPage.jsx';
 import MyOrders from './pages/MyOrdersPage.jsx'
 import AboutPage from './pages/AboutPage.jsx';
+ import ErrorBoundary from './components/ErrorBoundary';
+  // Protected Route Component
+ const ProtectedRoute = ({ children, isAuthenticated }) => {
+   return isAuthenticated ? children : <Navigate to="/login" replace />;
+ };
 
 function App() {
   const dispatch = useDispatch();
@@ -27,22 +32,54 @@ function App() {
   }, [dispatch]);
 
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={!isAuthenticated ? <LandingPage /> : <Navigate to="/home" />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/home" element={isAuthenticated ? <HomePage /> : <Navigate to="/" />} />
-        <Route path="/products" element={<ProductList />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
-         <Route path="/cart" element={<CartPage />} />
-         <Route path="/order" element={<OrderPage />} />
-        <Route path="/myorders" element={<MyOrders />} />
-        <Route path="/about" element={<AboutPage />} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
+     <ErrorBoundary>
+       <BrowserRouter>
+         <Navbar />
+         <main className="min-h-screen">
+           <Routes>
+             <Route path="/" element={!isAuthenticated ? <LandingPage /> : <Navigate to="/home" />} />
+             <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/home" />} />
+             <Route path="/signup" element={!isAuthenticated ? <SignupPage /> : <Navigate to="/home" />} />
+             <Route path="/home" element={
+               <ProtectedRoute isAuthenticated={isAuthenticated}>
+                 <HomePage />
+               </ProtectedRoute>
+             } />
+             <Route path="/products" element={<ProductList />} />
+             <Route path="/products/:id" element={<ProductDetails />} />
+             <Route path="/cart" element={
+               <ProtectedRoute isAuthenticated={isAuthenticated}>
+                 <CartPage />
+               </ProtectedRoute>
+             } />
+             <Route path="/order" element={
+               <ProtectedRoute isAuthenticated={isAuthenticated}>
+                 <OrderPage />
+               </ProtectedRoute>
+             } />
+             <Route path="/myorders" element={
+               <ProtectedRoute isAuthenticated={isAuthenticated}>
+                 <MyOrders />
+               </ProtectedRoute>
+             } />
+             <Route path="/about" element={<AboutPage />} />
+             {/* 404 Route */} 
+             <Route path="*" element={
+               <div className="min-h-screen bg-black text-white flex items-center justify-center">
+                 <div className="text-center">
+                   <h1 className="text-6xl font-bold text-red-500 mb-4">404</h1>
+                   <p className="text-xl mb-6">Page not found</p>
+                   <a href="/" className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded transition">
+                     Go Home
+                   </a>
+                 </div>
+               </div>
+             } />
+           </Routes>
+         </main>
+         <Footer />
+       </BrowserRouter>
+     </ErrorBoundary>
   );
 }
 
