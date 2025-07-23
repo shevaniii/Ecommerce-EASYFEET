@@ -43,10 +43,12 @@ app.use(cors({
 app.options('*', cors());
 
 app.use(express.json()) //to parse data into json 
+
+// Mount routes in specific order to avoid conflicts
 app.use('/api/products', productRoute)
-app.use('/api/auth', authRoute)   // all authentication routes should have prefix '/auth' .
-app.use('/api/auth/cart', cartRoute)
-app.use('/api/auth/order' , orderRoute);
+app.use('/api/auth', authRoute)   // authentication routes
+app.use('/api/cart', cartRoute)   // cart routes (removed /auth prefix to avoid conflicts)
+app.use('/api/orders', orderRoute); // order routes (removed /auth prefix and changed to plural)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT , ()=>{

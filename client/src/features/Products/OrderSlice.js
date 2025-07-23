@@ -14,7 +14,7 @@ export const placeOrder = createAsyncThunk('order/placeOrder' ,
                 ? { buyNow, productId, quantity, address, phone }
                 : { address, phone };
 
-            const res = await axios.post(`${BASE_URL}/api/auth/order/create`, orderData, {
+            const res = await axios.post(`${BASE_URL}/api/orders/create`, orderData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             
@@ -32,7 +32,7 @@ export const fetchOrders = createAsyncThunk('orders/fetchOrders', async(_, {reje
             return rejectWithValue('No authentication token found');
         }
 
-        const res = await axios.get(`${BASE_URL}/api/auth/order`, {
+        const res = await axios.get(`${BASE_URL}/api/orders`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -49,7 +49,7 @@ export const getOrderById = createAsyncThunk('orders/getOrderById', async(orderI
             return rejectWithValue('No authentication token found');
         }
 
-        const res = await axios.get(`${BASE_URL}/api/auth/order/${orderId}`, {
+        const res = await axios.get(`${BASE_URL}/api/orders/${orderId}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         

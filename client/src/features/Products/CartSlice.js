@@ -14,7 +14,7 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { rejectWi
       return rejectWithValue('No authentication token found');
     }
     
-    const res = await axios.get(`${BASE_URL}/api/auth/cart`, {
+    const res = await axios.get(`${BASE_URL}/api/cart`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -34,7 +34,7 @@ export const addToCart = createAsyncThunk('cart/addToCart', async ({ productId, 
     }
 
     const res = await axios.post(
-      `${BASE_URL}/api/auth/cart/add`,
+      `${BASE_URL}/api/cart/add`,
       { productId, quantity },
       {
         headers: {
@@ -58,7 +58,7 @@ export const updateCartQuantity = createAsyncThunk('cart/updateQuantity', async 
     }
 
     const res = await axios.put(
-      `${BASE_URL}/api/auth/cart/update/${productId}`,
+      `${BASE_URL}/api/cart/update/${productId}`,
       { quantity },
       {
         headers: {
@@ -81,7 +81,7 @@ export const removeFromCart = createAsyncThunk('cart/removeFromCart', async (pro
       return rejectWithValue('No authentication token found');
     }
 
-    await axios.delete(`${BASE_URL}/api/auth/cart/remove/${productId}`, {
+    await axios.delete(`${BASE_URL}/api/cart/remove/${productId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -101,7 +101,7 @@ export const clearCart = createAsyncThunk('cart/clearCart', async (_, { dispatch
       return rejectWithValue('No authentication token found');
     }
 
-    await axios.delete(`${BASE_URL}/api/auth/cart/clear`, {
+    await axios.delete(`${BASE_URL}/api/cart/clear`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
