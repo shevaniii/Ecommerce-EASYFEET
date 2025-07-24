@@ -46,7 +46,7 @@ const app = express()
  }));
 
  // Handle preflight requests
- app.options('*', cors());
+ app.options('*path', cors());
 
 app.use(express.json()) //to parse data into json 
 app.use('/api/products', productRoute)
