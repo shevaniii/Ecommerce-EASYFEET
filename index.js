@@ -11,39 +11,39 @@ import orderRoute from './routes/orderRoute.js'
 connectDB()
 const app = express()
  // Enable CORS for all routes or specific routes
-    // app.use(cors({
-    //   origin: 'https://ecommerce-easyfeet-shevaniiis-projects.vercel.app',
-    //   methods: ['GET','POST','PUT','DELETE'],
-    //   allowedHeaders: ['Content-Type', 'Authorization'],
-    //   credentials: true // If you need to send cookies
-    // }));
+    app.use(cors({
+      origin: 'https://ecommerce-easyfeet-shevaniiis-projects.vercel.app',
+      methods: ['GET','POST','PUT','DELETE' , 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true // If you need to send cookies
+    }));
  // Configure allowed origins
- const allowedOrigins = [
-   'https://ecommerce-easyfeet.vercel.app',
-   'https://ecommerce-easyfeet-shevaniiis-projects.vercel.app',
-   'http://localhost:3000',
-   'http://localhost:5173',
-   'http://localhost:5174'
- ];
+//  const allowedOrigins = [
+//    'https://ecommerce-easyfeet.vercel.app',
+//    'https://ecommerce-easyfeet-shevaniiis-projects.vercel.app',
+//    'http://localhost:3000',
+//    'http://localhost:5173',
+//    'http://localhost:5174'
+//  ];
 
  // Enable CORS for multiple origins
- app.use(cors({
-   origin: function (origin, callback) {
-     // Allow requests with no origin (like mobile apps or curl requests)
-     if (!origin) return callback(null, true);
+//  app.use(cors({
+//    origin: function (origin, callback) {
+//      // Allow requests with no origin (like mobile apps or curl requests)
+//      if (!origin) return callback(null, true);
 
-     if (allowedOrigins.includes(origin)) {
-       return callback(null, true);
-     } else {
-       console.log('Blocked origin:', origin);
-       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-       return callback(new Error(msg), false);
-     }
-   },
-   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-   allowedHeaders: ['Content-Type', 'Authorization'],
-   credentials: true
- }));
+//      if (allowedOrigins.includes(origin)) {
+//        return callback(null, true);
+//      } else {
+//        console.log('Blocked origin:', origin);
+//        const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+//        return callback(new Error(msg), false);
+//      }
+//    },
+//    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//    allowedHeaders: ['Content-Type', 'Authorization'],
+//    credentials: true
+//  }));
 
  // Handle preflight requests
  app.options('*path', cors());
