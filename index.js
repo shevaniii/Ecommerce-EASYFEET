@@ -10,9 +10,6 @@ import orderRoute from './routes/orderRoute.js'
 
 connectDB()
 const app = express()
- // Enable CORS for all routes or specific routes
-   const cors = require('cors');
-
 const allowedOrigins = [
   'https://ecommerce-easyfeet-shevaniiis-projects.vercel.app',
   'http://localhost:3000'
@@ -20,7 +17,6 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -31,6 +27,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
+
 
  // Configure allowed origins
 //  const allowedOrigins = [
