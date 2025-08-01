@@ -5,8 +5,8 @@ import Product from '../models/product.model.js';
 export const addToCart = async (req, res) => {
   try {
         const { productId, quantity = 1 } = req.body;
-     const userId = req.user._id;
- 
+     const userId = req.user._id || req.user.id; // Ensure userId is correctly set from the authenticated user
+
      // Validate input
      if (!productId) {
        return res.status(400).json({ msg: 'Product ID is required' });
@@ -57,9 +57,10 @@ export const addToCart = async (req, res) => {
        success: true 
      });
   } catch (error) {
-    console.error('Error in addToCart:', error);
-    res.status(500).json({ msg: 'Something went wrong while adding to cart' });
-  }
+  console.error('Error in addToCart:', error);
+  res.status(500).json({ msg: 'Something went wrong while adding to cart', error: error.message });
+}
+
 };
 
 // Get Cart
